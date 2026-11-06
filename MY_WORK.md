@@ -132,16 +132,17 @@
 
 ## Your Development Log
 
-### Entry 1 - [Date and Time]
-**What I did**:
+### Entry 1 - [November 6, 2026, 4:30 PM]
 
-**Details**:
+**What I did**:Worked on Feature 1 – ReadyQueue Lock, implemented the required locking mechanism, and corrected a missing lock.
 
-**Challenges**:
+**Details**:I started working on Feature 1 by reviewing the ReadyQueue class and identifying the shared data structures that needed protection. I implemented a ReentrantLock to ensure that only one thread could access the shared data at a time. I added locking and unlocking operations to the required methods: add(), poll(), processOf(), and snapshot(). I also used try-finally to ensure that the lock was always released. After completing the implementation, I ran the program successfully and reviewed my code.
 
-**Solution**:
+**Challenges**:After finishing the implementation, I discovered that I had forgotten to add a lock to one of the required sections. I had already created my first commit, so I needed to correct the implementation.
 
-**Time spent**:
+**Solution**:I went back to the code, added the missing lock, and created a second commit to save the correction. I ran the program again and confirmed that it worked successfully.
+
+**Time spent**:2 hours
 
 ---
 
