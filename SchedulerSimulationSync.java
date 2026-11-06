@@ -107,7 +107,7 @@ class SharedStats {
 class ReadyQueue {
     private final LinkedList<Thread> list = new LinkedList<>();   // FIFO queue of threads
     private final Map<Thread, Process> map = new HashMap<>();     // thread -> process (same idea as Assignment 1)
-
+    private final ReentrantLock lock = new ReentrantLock();
     // TODO Feature 1: declare the lock protecting `list` and `map` here
 
     // TODO Feature 3: declare the counting semaphore that counts the processes waiting in the ready queue here
@@ -165,9 +165,7 @@ public void add(Process process) {
             lock.unlock();
         }
     }
-
-
-    // Names of the processes currently waiting in the queue (used to display the ready queue)
+   
     
     // Names of the processes currently waiting in the queue (used to display the ready queue)
     public String snapshot() {
