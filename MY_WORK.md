@@ -146,53 +146,61 @@
 
 ---
 
-### Entry 2 - [Date and Time]
-**What I did**:
+### Entry 2 - [ November 7, 2026, 10:12 PM]
+**What I did**:Implemented Feature 2 – SharedStats Lock
 
-**Details**:
 
-**Challenges**:
+**Details**:I reviewed the shared statistics in the SharedStats class and added a ReentrantLock to protect concurrent access. I used the same lock in the methods that update and read the context switch count, completed process count, and total service time. I used try-finally to make sure the lock is released after each operation. After implementing the changes, I ran the program successfully.
 
-**Solution**:
+**Challenges**:I needed to make sure that all shared statistics were protected by the same lock to prevent inconsistent values when multiple CPU threads accessed them concurrently
 
-**Time spent**:
+**Solution**:I used one shared ReentrantLock for all statistics-related methods and ensured that every lock acquisition had a corresponding unlock in the finally block
 
----
-
-### Entry 3 - [Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
+**Time spent**:30 minutes
 
 ---
 
-### Entry 4 - [Date and Time]
-**What I did**:
+### Entry 3 - [November 8, 2026, 10:12 PM]
+**What I did**:Implemented Feature 3 – Semaphore-based CPU waiting
 
-**Details**:
+**Details**:I imported the Java Semaphore class and added a semaphore to the ReadyQueue, initialized with zero permits. Whenever a process is added to the ready queue, the semaphore releases a permit. CPU workers use acquire() to wait for available processes instead of continuously checking the queue. I also added a method to wake all CPUs when processing is complete
 
-**Challenges**:
+**Challenges**:I needed to make sure that CPUs could wait when the queue was empty and wake up when new processes became available. I also needed to handle the shutdown case so that CPUs would not remain blocked after all processes were completed
 
-**Solution**:
+**Solution**:I used release() when adding processes, acquire() when CPUs wait for work, and released additional permits to wake the CPUs during shutdown. I then ran the program to check that it completed successfully
 
-**Time spent**:
+**Time spent**:1 hour
 
 ---
 
-### Entry 5 - [Date and Time]
-**What I did**:
+### Entry 4 - [November 8, 2026, 1:58 PM]
+**What I did**:Tested the synchronization implementation by running the final program five separate times
 
-**Details**:
+**Details**:I ran the program five times to verify that the synchronization features worked correctly. In all five runs, the expected and observed values matched:
 
-**Challenges**:
+* Context switches: 23
+* Completed processes: 11
+* Total service time: 32312 ms
+* Busy-waiting polls: 0
 
-**Solution**:
+Every run displayed the message All shared values are consistent
+
+**Challenges**:I needed to verify that the shared values remained consistent across repeated executions and that the CPU workers terminated correctly
+
+**Solution**:I repeated the tests five times and compared the expected values with the observed values. All five runs passed successfully, with no busy-waiting polls
+
+**Time spent**:20 minutes
+
+---
+
+### Entry 5 - [November 9, 2026, 8:30 PM]
+**What I did**:Reviewed and documented the synchronization implementation
+
+**Details**:I reviewed the changes made to ReadyQueue, SharedStats, and CpuWorker. I documented the critical sections and the locks used to protect shared data. I also reviewed how the semaphore controls CPU waiting and how CPUs are awakened during shutdown. Finally, I organized the testing results for the assignment report
+
+**Challenges**:I needed to explain how the synchronization mechanisms work and why each shared resource requires protection
+
+**Solution**:I reviewed the implementation and connected each synchronization mechanism to its purpose. I used the successful test results to support the documentation
 
 **Time spent**:
 
@@ -241,7 +249,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I learned that synchronization is important when multiple threads access shared data at the same time. Without synchronization, a race condition can occur and cause incorrect results. I used ReentrantLock to protect the critical sections in the ReadyQueue and SharedStats classes. I also learned that using try-finally ensures that the lock is released even if an exception occurs. The counting semaphore allows CPU workers to wait when no process is available instead of continuously checking the queue. This assignment helped me understand how mutual exclusion and thread coordination work together to keep shared data consistent]
 
 ## Question 2: What was the most challenging part of this assignment?
 
@@ -249,7 +257,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[The most challenging part of this assignment was implementing the semaphore and handling CPU shutdown correctly. At first, I needed to understand how CPU workers should wait when the ready queue is empty. I also had to understand why the semaphore should start with zero permits. Another challenge was making sure that all CPU workers could finish after all processes were completed. If the CPUs remained blocked in acquire(), the program might not terminate. Understanding when to release additional permits helped me solve this challenge]
 
 ## Question 3: How did you overcome the challenges you faced?
 
@@ -257,7 +265,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[I overcame the challenges by reviewing the synchronization concepts and examining the code carefully. I worked on the three features separately instead of changing everything at once. After implementing each feature, I reviewed the affected methods and checked that every lock was released in a finally block. I also ran the program multiple times to check whether the shared statistics remained consistent. When I found a missing lock in the ready queue, I corrected it and tested the program again. This step-by-step approach helped me understand the implementation and identify mistakes]
 
 ## Question 4: Where can synchronization concepts be applied in real-world applications?
 
@@ -265,7 +273,7 @@
 
 **Your Answer:** *(5-7 sentences)*
 
-[Write your answer here.]
+[Synchronization is used in many real-world applications where multiple users or threads access shared resources. For example, banking systems need synchronization when several transactions update the same account balance. Ticket booking systems also need it to prevent two customers from booking the same seat. A print queue uses synchronization to organize requests from multiple users. Databases use locks to control access to shared records and maintain data consistency. These examples are similar to my assignment because multiple CPU workers access and update shared resource]
 
 ### Optional: What would you like to learn more about?
 
