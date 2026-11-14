@@ -307,20 +307,53 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[The original starter contains race conditions because multiple CPU threads access shared data without proper synchronization. In my output, CPU-2, CPU-4, and CPU-3 all picked P1, which caused multiple threads to attempt to start the same process. This resulted in IllegalThreadStateException and incorrect statistics. For example, CPU-1 and CPU-2 can both read the same contextSwitchCount value, pause, and then write the same incremented value, causing one update to be lost. The verification results show that the observed values were lower than the expected values]
 
 Verification block of the **original starter**:
 ```
-[Paste the verification block (or the exception/watchdog message) of the starter here]
+[WATCHDOG: the simulation did not finish (30 s).
+
+= VERIFICATION (expected values are computed from YOUR seed)
+
+Context switches (quanta executed)
+expected 34
+observed 27
+× MISMATCH
+
+Completed processes
+expected 16
+observed 13
+× MISMATCH
+
+Total service time (ms)
+expected 104515
+observed 81680
+× MISMATCH
+
+Busy-waiting polls (must be 0)
+expected 0
+observed 703
+× MISMATCH
+
+× At least one check failed:
+a race condition or busy waiting is still present.]
 ```
 
 Verification block of **my final version**:
 ```
-[Paste the verification block of your final version here (all lines ✔)]
+[Context switches: 23
+Completed processes: 11
+Total service time: 32312 ms
+Busy-waiting polls: 0
+All shared values are consistent]
 ```
 
 **Explanation of the timeline:**
-[Explain the lost update step by step.]
+[1. CPU-1 reads contextSwitchCount and gets 12.
+2. CPU-2 reads the same value, 12, before CPU-1 updates it.
+3. CPU-1 increments the value and writes 13.
+4. CPU-2 also increments its old value and writes 13.
+5. The correct value should be 14, but the final value is 13 because one update is lost]
 
 ## Question 2: Critical Sections and Lock Granularity
 
