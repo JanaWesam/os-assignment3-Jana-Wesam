@@ -132,7 +132,7 @@
 
 ## Your Development Log
 
-### Entry 1 - [November 6, 2026, 4:30 PM]
+### Entry 1 - November 6, 2026, 4:30 PM
 
 **What I did**:Worked on Feature 1 – ReadyQueue Lock, implemented the required locking mechanism, and corrected a missing lock.
 
@@ -146,7 +146,7 @@
 
 ---
 
-### Entry 2 - [ November 7, 2026, 10:12 PM]
+### Entry 2 - November 7, 2026, 10:12 PM
 **What I did**:Implemented Feature 2 – SharedStats Lock
 
 
@@ -160,7 +160,7 @@
 
 ---
 
-### Entry 3 - [November 8, 2026, 8:00 AM]
+### Entry 3 - November 8, 2026, 8:00 AM
 **What I did**:Implemented Feature 3 – Semaphore-based CPU waiting
 
 **Details**:I imported the Java Semaphore class and added a semaphore to the ReadyQueue, initialized with zero permits. Whenever a process is added to the ready queue, the semaphore releases a permit. CPU workers use acquire() to wait for available processes instead of continuously checking the queue. I also added a method to wake all CPUs when processing is complete
@@ -173,7 +173,7 @@
 
 ---
 
-### Entry 4 - [November 8, 2026, 2:00 PM]
+### Entry 4 - November 8, 2026, 2:00 PM
 **What I did**:Tested the synchronization implementation by running the final program five separate times
 
 **Details**:I ran the program five times to verify that the synchronization features worked correctly. In all five runs, the expected and observed values matched:
@@ -193,7 +193,7 @@ Every run displayed the message All shared values are consistent
 
 ---
 
-### Entry 5 - [November 9, 2026, 8:30 PM]
+### Entry 5 - November 9, 2026, 8:30 PM
 **What I did**:Reviewed and documented the synchronization implementation
 
 **Details**:I reviewed the changes made to ReadyQueue, SharedStats, and CpuWorker. I documented the critical sections and the locks used to protect shared data. I also reviewed how the semaphore controls CPU waiting and how CPUs are awakened during shutdown. Finally, I organized the testing results for the assignment report
@@ -206,24 +206,11 @@ Every run displayed the message All shared values are consistent
 
 ---
 
-### Entry 6 - [Optional - Date and Time]
-**What I did**:
-
-**Details**:
-
-**Challenges**:
-
-**Solution**:
-
-**Time spent**:
-
----
-
 ## Development Log Summary
 
 > 💡 **TIP:** Fill this in **last**, after all entries are written.
 
-**Total time spent on assignment**: [4 hours]
+**Total time spent on assignment**: 4 hours and 30 minutes 
 
 **Most challenging part**:Identifying race conditions and understanding how to protect shared data using locks without causing unnecessary blocking.
 
@@ -249,7 +236,7 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(5-7 sentences)*
 
-[I learned that synchronization is important when multiple threads access shared data at the same time. Without synchronization, a race condition can occur and cause incorrect results. I used ReentrantLock to protect the critical sections in the ReadyQueue and SharedStats classes. I also learned that using try-finally ensures that the lock is released even if an exception occurs. The counting semaphore allows CPU workers to wait when no process is available instead of continuously checking the queue. This assignment helped me understand how mutual exclusion and thread coordination work together to keep shared data consistent]
+I learned that synchronization is important when multiple threads access shared data at the same time. Without synchronization, a race condition can occur and cause incorrect results. I used ReentrantLock to protect the critical sections in the ReadyQueue and SharedStats classes. I also learned that using try-finally ensures that the lock is released even if an exception occurs. The counting semaphore allows CPU workers to wait when no process is available instead of continuously checking the queue. This assignment helped me understand how mutual exclusion and thread coordination work together to keep shared data consistent.
 
 ## Question 2: What was the most challenging part of this assignment?
 
@@ -257,7 +244,7 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(5-7 sentences)*
 
-[The most challenging part of this assignment was implementing the semaphore and handling CPU shutdown correctly. At first, I needed to understand how CPU workers should wait when the ready queue is empty. I also had to understand why the semaphore should start with zero permits. Another challenge was making sure that all CPU workers could finish after all processes were completed. If the CPUs remained blocked in acquire(), the program might not terminate. Understanding when to release additional permits helped me solve this challenge]
+The most challenging part of this assignment was implementing the semaphore and handling CPU shutdown correctly. At first, I needed to understand how CPU workers should wait when the ready queue is empty. I also had to understand why the semaphore should start with zero permits. Another challenge was making sure that all CPU workers could finish after all processes were completed. If the CPUs remained blocked in acquire(), the program might not terminate. Understanding when to release additional permits helped me solve this challenge.
 
 ## Question 3: How did you overcome the challenges you faced?
 
@@ -265,7 +252,7 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(5-7 sentences)*
 
-[I overcame the challenges by reviewing the synchronization concepts and examining the code carefully. I worked on the three features separately instead of changing everything at once. After implementing each feature, I reviewed the affected methods and checked that every lock was released in a finally block. I also ran the program multiple times to check whether the shared statistics remained consistent. When I found a missing lock in the ready queue, I corrected it and tested the program again. This step-by-step approach helped me understand the implementation and identify mistakes]
+I overcame the challenges by reviewing the synchronization concepts and examining the code carefully. I worked on the three features separately instead of changing everything at once. After implementing each feature, I reviewed the affected methods and checked that every lock was released in a finally block. I also ran the program multiple times to check whether the shared statistics remained consistent. When I found a missing lock in the ready queue, I corrected it and tested the program again. This step-by-step approach helped me understand the implementation and identify mistakes.
 
 ## Question 4: Where can synchronization concepts be applied in real-world applications?
 
@@ -273,7 +260,7 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(5-7 sentences)*
 
-[Synchronization is used in many real-world applications where multiple users or threads access shared resources. For example, banking systems need synchronization when several transactions update the same account balance. Ticket booking systems also need it to prevent two customers from booking the same seat. A print queue uses synchronization to organize requests from multiple users. Databases use locks to control access to shared records and maintain data consistency. These examples are similar to my assignment because multiple CPU workers access and update shared resource]
+Synchronization is used in many real-world applications where multiple users or threads access shared resources. For example, banking systems need synchronization when several transactions update the same account balance. Ticket booking systems also need it to prevent two customers from booking the same seat. A print queue uses synchronization to organize requests from multiple users. Databases use locks to control access to shared records and maintain data consistency. These examples are similar to my assignment because multiple CPU workers access and update shared resource.
 
 ### Optional: What would you like to learn more about?
 
@@ -307,32 +294,32 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(3-5 sentences)*
 
-[The original starter code had a race condition because CPU-1 and CPU-2 accessed the shared ReadyQueue at the same time without proper synchronization. Both CPUs picked P1, even though a process should not be assigned to two CPUs simultaneously. This caused an IllegalThreadStateException when CPU-1 tried to start the same thread again. The bug can also happen on a real machine without RaceWindow.pause() because thread execution can overlap unpredictably. It is difficult to detect because it depends on timing and may not occur in every run.]
+The original starter code had a race condition because CPU-1 and CPU-2 accessed the shared ReadyQueue at the same time without proper synchronization. Both CPUs picked P1, even though a process should not be assigned to two CPUs simultaneously. This caused an IllegalThreadStateException when CPU-1 tried to start the same thread again. The bug can also happen on a real machine without RaceWindow.pause() because thread execution can overlap unpredictably. It is difficult to detect because it depends on timing and may not occur in every run.
 
 Verification block of the **original starter**:
 ```
-[┌─ [CPU-2] picks P1
+┌─ [CPU-2] picks P1
 ┌─ [CPU-1] picks P1
 Exception in thread "CPU-1" java.lang.IllegalThreadStateException
         at java.base/java.lang.Thread.start(Unknown Source)
-        at CpuWorker.run(SchedulerSimulationSync.java:283)]
+        at CpuWorker.run(SchedulerSimulationSync.java:283)
 ```
 
 Verification block of **my final version**:
 ```
-[Expected context switches: 23, observed: 23
+Expected context switches: 23, observed: 23
 Expected completed processes: 11, observed: 11
 Expected service time: 32312, observed: 32312
 Expected busy-waiting polls: 0, observed: 0
-All shared values are consistent.]
+All shared values are consistent.
 ```
 
 **Explanation of the timeline:**
-[CPU-2 reads the ReadyQueue and selects P1.
+CPU-2 reads the ReadyQueue and selects P1.
 CPU-1 reads the ReadyQueue before CPU-2 removes P1.
 CPU-1 also selects P1.
 Both CPUs attempt to start the same process thread.
-CPU-1 throws an IllegalThreadStateException because the thread has already been started.]
+CPU-1 throws an IllegalThreadStateException because the thread has already been started.
 
 ## Question 2: Critical Sections and Lock Granularity
 
@@ -342,7 +329,7 @@ CPU-1 throws an IllegalThreadStateException because the thread has already been 
 
 **Your Answer:** *(3-5 sentences)*
 
-[I used two separate ReentrantLocks to protect shared data. The statsLock protects contextSwitchCount, completedProcessCount, and totalServiceTime, while the ReadyQueue lock protects the queue list and process map. I used one lock for all three statistics because it makes synchronization simpler and keeps statistics consistent, although updates to different counters must wait for each other. The ReadyQueue uses a different lock to avoid unnecessary blocking between queue operations and statistics updates. These locks provide mutual exclusion, and threads can make progress when a lock is released; however, the default ReentrantLock is not fair, so bounded waiting is not guaranteed and a thread may experience starvation.]
+I used two separate ReentrantLocks to protect shared data. The statsLock protects contextSwitchCount, completedProcessCount, and totalServiceTime, while the ReadyQueue lock protects the queue list and process map. I used one lock for all three statistics because it makes synchronization simpler and keeps statistics consistent, although updates to different counters must wait for each other. The ReadyQueue uses a different lock to avoid unnecessary blocking between queue operations and statistics updates. These locks provide mutual exclusion, and threads can make progress when a lock is released; however, the default ReentrantLock is not fair, so bounded waiting is not guaranteed and a thread may experience starvation.
 
 | Critical section (variable / method) | Lock used | Why it needs protection |
 |---|---|---|
@@ -365,7 +352,7 @@ CPU-1 throws an IllegalThreadStateException because the thread has already been 
 
 **Your Answer:** *(3-5 sentences)*
 
-[In the original starter code, CPUs used busy waiting by repeatedly checking whether the ReadyQueue had a process, wasting CPU time while waiting. The busy-waiting polls value in my original starter run was not printed because the program crashed with an IllegalThreadStateException before reaching the verification block. In my final version, the semaphore represents the number of available processes in the ReadyQueue; its initial value is 0 because the queue is empty, and its value becomes 11 after the 11 initial add() calls. When the queue is empty, a CPU blocks in acquire() instead of repeatedly checking the queue. The last CPU calls release(totalCPUs) to wake blocked CPUs so they can check whether execution is complete; otherwise, they could remain blocked forever.]
+In the original starter code, CPUs used busy waiting by repeatedly checking whether the ReadyQueue had a process, wasting CPU time while waiting. The busy-waiting polls value in my original starter run was not printed because the program crashed with an IllegalThreadStateException before reaching the verification block. In my final version, the semaphore represents the number of available processes in the ReadyQueue; its initial value is 0 because the queue is empty, and its value becomes 11 after the 11 initial add() calls. When the queue is empty, a CPU blocks in acquire() instead of repeatedly checking the queue. The last CPU calls release(totalCPUs) to wake blocked CPUs so they can check whether execution is complete; otherwise, they could remain blocked forever.
 
 ## Question 4: Classical Problems and Deadlock
 
@@ -376,17 +363,17 @@ CPU-1 throws an IllegalThreadStateException because the thread has already been 
 **Your Answer:** *(3-5 sentences)*
 
 **Classical problem and roles**:
-[The classical synchronization problem is the Producer-Consumer Problem (Bounded-Buffer Problem). The main thread acts as a producer when it adds processes to the ReadyQueue, while the CPU workers act as consumers when they remove processes; however, CPUs also act as producers when they re-enqueue unfinished processes. For a bounded queue with capacity K, the three semaphores are empty = K, full = 0, and mutex = 1. A deadlock can occur if a producer holds the mutex while waiting for an empty slot, because a consumer needs the same mutex to remove a process and free a slot. To prevent this deadlock, we break the hold-and-wait condition by waiting on empty before acquiring mutex.]
+The classical synchronization problem is the Producer-Consumer Problem (Bounded-Buffer Problem). The main thread acts as a producer when it adds processes to the ReadyQueue, while the CPU workers act as consumers when they remove processes; however, CPUs also act as producers when they re-enqueue unfinished processes. For a bounded queue with capacity K, the three semaphores are empty = K, full = 0, and mutex = 1. A deadlock can occur if a producer holds the mutex while waiting for an empty slot, because a consumer needs the same mutex to remove a process and free a slot. To prevent this deadlock, we break the hold-and-wait condition by waiting on empty before acquiring mutex.
 
 **Semaphores for a bounded queue (name and initial value)**:
-[empty = K: Represents the available empty slots.
+empty = K: Represents the available empty slots.
 
 full = 0: Represents the number of occupied slots.
 
-mutex = 1: Ensures exclusive access to the queue.]
+mutex = 1: Ensures exclusive access to the queue.
 
 **Deadlock scenario and prevention**:
-[A deadlock can occur when a producer acquires the mutex before waiting for an empty slot. If the queue is full, the producer waits while holding the mutex, preventing the consumer from acquiring it to remove an item and free a slot. This creates a hold-and-wait condition. To prevent it, the producer must wait on empty before acquiring mutex.]
+A deadlock can occur when a producer acquires the mutex before waiting for an empty slot. If the queue is full, the producer waits while holding the mutex, preventing the consumer from acquiring it to remove an item and free a slot. This creates a hold-and-wait condition. To prevent it, the producer must wait on empty before acquiring mutex.
 
 ## Summary
 
@@ -406,33 +393,33 @@ mutex = 1: Ensures exclusive access to the queue.]
 > ⚠️ **WARNING:** Go through every line. Blackboard does not accept submissions after the deadline, which is **November 14, 2026**.
 
 **Repository**
-- [ ] Repository is **PUBLIC** (Settings → Danger Zone → Visibility)
-- [ ] Repository is renamed to `OS-Assignment3-YourFirstName-YourLastName`
-- [ ] GitHub account uses the university email (`@std.psau.edu.sa`)
+- ✅ Repository is **PUBLIC** (Settings → Danger Zone → Visibility)
+- ✅ Repository is renamed to `OS-Assignment3-YourFirstName-YourLastName`
+- ✅ GitHub account uses the university email (`@std.psau.edu.sa`)
 
 **Code**
-- [ ] Student ID is set in `SchedulerSimulationSync.java` (line 304)
-- [ ] My code is based **only** on the starter of this repository (nothing copied from previous assignments)
-- [ ] Code compiles and runs with no errors, and terminates by itself (no `⛔ WATCHDOG`)
-- [ ] Feature 1 (ready queue lock), Feature 2 (statistics locks) and Feature 3 (semaphore, no busy waiting) all work
-- [ ] **The four verification lines are ✔ in 5 consecutive runs**
-- [ ] Every lock is released in a `finally` block
-- [ ] `RaceWindow`, `Config`, the verification block and the watchdog are **unchanged**
-- [ ] Each feature has clear comments
+- ✅ Student ID is set in `SchedulerSimulationSync.java` (line 304)
+- ✅ My code is based **only** on the starter of this repository (nothing copied from previous assignments)
+- ✅ Code compiles and runs with no errors, and terminates by itself (no `⛔ WATCHDOG`)
+- ✅ Feature 1 (ready queue lock), Feature 2 (statistics locks) and Feature 3 (semaphore, no busy waiting) all work
+- ✅ **The four verification lines are ✔ in 5 consecutive runs**
+- ✅ Every lock is released in a `finally` block
+- ✅ `RaceWindow`, `Config`, the verification block and the watchdog are **unchanged**
+- ✅ Each feature has clear comments
 
 **Commits**
-- [ ] **At least 4 meaningful commits, ideally 7 or more**
-- [ ] **One commit per feature**
-- [ ] Commits are spread over **different dates** (not all in the last hour)
-- [ ] Everything is **pushed** to GitHub
+- ✅ **At least 4 meaningful commits, ideally 7 or more**
+- ✅ **One commit per feature**
+- ✅ Commits are spread over **different dates** (not all in the last hour)
+- ✅ Everything is **pushed** to GitHub
 
 **This file (`MY_WORK.md`)**
-- [ ] Full name and student ID filled in at the top
-- [ ] Development log has **5+ entries** on different dates
-- [ ] Reflection: 4 questions, 5-7 sentences each
-- [ ] Technical answers: 4 questions, 3-5 sentences each, with examples from **your** output (starter output **and** final output pasted in Question 1)
-- [ ] No `[...]` placeholders left
-- [ ] No section headers deleted
+- ✅ Full name and student ID filled in at the top
+- ✅ Development log has **5+ entries** on different dates
+- ✅ Reflection: 4 questions, 5-7 sentences each
+- ✅ Technical answers: 4 questions, 3-5 sentences each, with examples from **your** output (starter output **and** final output pasted in Question 1)
+- ✅ No `[...]` placeholders left
+- ✅ No section headers deleted
 
 **Video**
 - [ ] 2-3 minutes long, named `StudentID_Assignment3_Demo.mp4`
