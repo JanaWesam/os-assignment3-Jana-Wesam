@@ -294,7 +294,24 @@ Synchronization is used in many real-world applications where multiple users or 
 
 **Your Answer:** *(3-5 sentences)*
 
-The original starter code had a race condition because CPU-1 and CPU-2 accessed the shared ReadyQueue at the same time without proper synchronization. Both CPUs picked P1, even though a process should not be assigned to two CPUs simultaneously. This caused an IllegalThreadStateException when CPU-1 tried to start the same thread again. The bug can also happen on a real machine without RaceWindow.pause() because thread execution can overlap unpredictably. It is difficult to detect because it depends on timing and may not occur in every run.
+Your Answer:
+
+The original starter code had race conditions because multiple CPUs accessed shared data without proper synchronization. CPU-1 and CPU-2 both selected P1 from the ReadyQueue, causing an IllegalThreadStateException when they attempted to start the same thread. A lost update can also happen in incrementContextSwitch(): CPU-1 and CPU-2 both read contextSwitchCount = 12, pause at RaceWindow.pause(), and then each writes 13, so one increment is lost instead of the counter reaching 14. The same bug can happen on a real machine without RaceWindow.pause() because a thread can be interrupted between reading and writing a shared value. It is difficult to detect because it depends on thread timing and may not occur in every run.
+
+Original starter output (crashed before verification):
+┌─ [CPU-2] picks P1
+┌─ [CPU-1] picks P1
+Exception in thread "CPU-1" java.lang.IllegalThreadStateException
+        at java.base/java.lang.Thread.start(Unknown Source)
+        at CpuWorker.run(SchedulerSimulationSync.java:283)
+
+Verification block of my final version:
+
+Expected context switches: 23, observed: 23
+Expected completed processes: 11, observed: 11
+Expected service time: 32312, observed: 32312
+Expected busy-waiting polls: 0, observed: 0
+All shared values are consistent.
 
 Verification block of the **original starter**:
 ```
@@ -349,7 +366,7 @@ I used two separate ReentrantLocks to protect shared data. The statsLock protect
 
 **Your Answer:** *(3-5 sentences)*
 
-In the original starter code, CPUs used busy waiting by repeatedly checking whether the ReadyQueue had a process, wasting CPU time while waiting. The busy-waiting polls value in my original starter run was not printed because the program crashed with an IllegalThreadStateException before reaching the verification block. In my final version, the semaphore represents the number of available processes in the ReadyQueue; its initial value is 0 because the queue is empty, and its value becomes 11 after the 11 initial add() calls. When the queue is empty, a CPU blocks in acquire() instead of repeatedly checking the queue. The last CPU calls release(totalCPUs) to wake blocked CPUs so they can check whether execution is complete; otherwise, they could remain blocked forever.
+In the original starter code, CPUs used busy waiting by repeatedly checking whether the ReadyQueue had a process, wasting CPU time while waiting. Two CPUs selected P1 at the same time, causing an IllegalThreadStateException, and P2 was never executed. The watchdog detected that the simulation did not finish, and the verification showed 10 completed processes instead of 11, 22 context switches instead of 23, and 911 busy-waiting polls instead of 0. In my final version, I used a semaphore to represent the number of available processes in the ReadyQueue; its initial value is 0 because the queue is empty, and it becomes 11 after the 11 initial add() calls. When the queue is empty, a CPU blocks in acquire() instead of repeatedly checking the queue, and each add() releases a permit. A CPU that detects that all processes have completed calls release(totalCPUs) to wake the blocked CPUs so they can terminate. The final verification confirmed 11 completed processes, 23 context switches, the expected service time of 32312 ms, and 0 busy-waiting polls.
 
 ## Question 4: Classical Problems and Deadlock
 
@@ -376,7 +393,7 @@ A deadlock can occur when a producer acquires the mutex before waiting for an em
 
 **Key concepts I understood through these questions:**
 1.    Race conditions happen when multiple threads access shared data without synchronization.
-2.    Locks provide mutual exclusion, while semaphores coordinate access to available processes
+2.    Locks provide mutual exclusion, while semaphores coordinate access to available processes.
 3.    The Producer-Consumer Problem explains synchronization between adding and removing processes.
 
 **Concepts I need to study more:**
