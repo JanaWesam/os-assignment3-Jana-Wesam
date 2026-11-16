@@ -126,7 +126,7 @@
 
 **Solution**: Read `ReadyQueue.poll()` again and found the `RaceWindow.pause()` between reading the head and removing it
 
-**Time spent**: 45 minutes
+**Time spent**: 45 minutes 
 
 ---
 
@@ -160,7 +160,7 @@
 
 ---
 
-### Entry 3 - [November 8, 2026, 10:12 PM]
+### Entry 3 - [November 8, 2026, 8:00 AM]
 **What I did**:Implemented Feature 3 – Semaphore-based CPU waiting
 
 **Details**:I imported the Java Semaphore class and added a semaphore to the ReadyQueue, initialized with zero permits. Whenever a process is added to the ready queue, the semaphore releases a permit. CPU workers use acquire() to wait for available processes instead of continuously checking the queue. I also added a method to wake all CPUs when processing is complete
@@ -173,7 +173,7 @@
 
 ---
 
-### Entry 4 - [November 8, 2026, 1:58 PM]
+### Entry 4 - [November 8, 2026, 2:00 PM]
 **What I did**:Tested the synchronization implementation by running the final program five separate times
 
 **Details**:I ran the program five times to verify that the synchronization features worked correctly. In all five runs, the expected and observed values matched:
@@ -189,7 +189,7 @@ Every run displayed the message All shared values are consistent
 
 **Solution**:I repeated the tests five times and compared the expected values with the observed values. All five runs passed successfully, with no busy-waiting polls
 
-**Time spent**:20 minutes
+**Time spent**:30 minutes
 
 ---
 
@@ -202,7 +202,7 @@ Every run displayed the message All shared values are consistent
 
 **Solution**:I reviewed the implementation and connected each synchronization mechanism to its purpose. I used the successful test results to support the documentation
 
-**Time spent**:
+**Time spent**:30 minutes
 
 ---
 
@@ -223,13 +223,13 @@ Every run displayed the message All shared values are consistent
 
 > 💡 **TIP:** Fill this in **last**, after all entries are written.
 
-**Total time spent on assignment**: [X hours]
+**Total time spent on assignment**: [4 hours]
 
-**Most challenging part**:
+**Most challenging part**:Identifying race conditions and understanding how to protect shared data using locks without causing unnecessary blocking.
 
-**Most interesting learning**:
+**Most interesting learning**:Learning how semaphores coordinate CPU workers and prevent busy waiting when the ready queue is empty.
 
-**What I would do differently next time**:
+**What I would do differently next time**:I would plan the synchronization design earlier, test each feature separately, and keep a more detailed development log while working.
 
 ---
 
@@ -307,20 +307,32 @@ Every run displayed the message All shared values are consistent
 
 **Your Answer:** *(3-5 sentences)*
 
-[]
+[The original starter code had a race condition because CPU-1 and CPU-2 accessed the shared ReadyQueue at the same time without proper synchronization. Both CPUs picked P1, even though a process should not be assigned to two CPUs simultaneously. This caused an IllegalThreadStateException when CPU-1 tried to start the same thread again. The bug can also happen on a real machine without RaceWindow.pause() because thread execution can overlap unpredictably. It is difficult to detect because it depends on timing and may not occur in every run.]
 
 Verification block of the **original starter**:
 ```
-[]
+[┌─ [CPU-2] picks P1
+┌─ [CPU-1] picks P1
+Exception in thread "CPU-1" java.lang.IllegalThreadStateException
+        at java.base/java.lang.Thread.start(Unknown Source)
+        at CpuWorker.run(SchedulerSimulationSync.java:283)]
 ```
 
 Verification block of **my final version**:
 ```
-[]
+[Expected context switches: 23, observed: 23
+Expected completed processes: 11, observed: 11
+Expected service time: 32312, observed: 32312
+Expected busy-waiting polls: 0, observed: 0
+All shared values are consistent.]
 ```
 
 **Explanation of the timeline:**
-[]
+[CPU-2 reads the ReadyQueue and selects P1.
+CPU-1 reads the ReadyQueue before CPU-2 removes P1.
+CPU-1 also selects P1.
+Both CPUs attempt to start the same process thread.
+CPU-1 throws an IllegalThreadStateException because the thread has already been started.]
 
 ## Question 2: Critical Sections and Lock Granularity
 
@@ -330,12 +342,20 @@ Verification block of **my final version**:
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[I used two separate ReentrantLocks to protect shared data. The statsLock protects contextSwitchCount, completedProcessCount, and totalServiceTime, while the ReadyQueue lock protects the queue list and process map. I used one lock for all three statistics because it makes synchronization simpler and keeps statistics consistent, although updates to different counters must wait for each other. The ReadyQueue uses a different lock to avoid unnecessary blocking between queue operations and statistics updates. These locks provide mutual exclusion, and threads can make progress when a lock is released; however, the default ReentrantLock is not fair, so bounded waiting is not guaranteed and a thread may experience starvation.]
 
 | Critical section (variable / method) | Lock used | Why it needs protection |
 |---|---|---|
 | [e.g., `ReadyQueue.poll()`] | [lock name] | [reason] |
-| [...] | [...] | [...] |
+| | Critical section (variable / method) | Lock used | Why it needs protection |
+|---|---|---|
+| `ReadyQueue.list` and `ReadyQueue.map` | `lock` | Prevent concurrent modifications and inconsistent queue data. |
+| `add()`, `poll()`, `processOf()`, `snapshot()` | `lock` | Ensure only one thread accesses or modifies the queue at a time. |
+| `contextSwitchCount` | `statsLock` | Prevent lost updates when multiple CPUs increment the counter. |
+| `completedProcessCount` | `statsLock` | Prevent incorrect completion counts. |
+| `totalServiceTime` | `statsLock` | Prevent lost updates when adding service time. |
+| `incrementContextSwitch()`, `incrementCompletedProcess()`, `addServiceTime()` | `statsLock` | Protect updates to shared statistics. |
+| Statistics getter methods | `statsLock` | Ensure safe access to shared counter values.|
 
 ## Question 3: Busy Waiting vs Semaphore
 
@@ -345,7 +365,7 @@ Verification block of **my final version**:
 
 **Your Answer:** *(3-5 sentences)*
 
-[Write your answer here.]
+[In the original starter code, CPUs used busy waiting by repeatedly checking whether the ReadyQueue had a process, wasting CPU time while waiting. The busy-waiting polls value in my original starter run was not printed because the program crashed with an IllegalThreadStateException before reaching the verification block. In my final version, the semaphore represents the number of available processes in the ReadyQueue; its initial value is 0 because the queue is empty, and its value becomes 11 after the 11 initial add() calls. When the queue is empty, a CPU blocks in acquire() instead of repeatedly checking the queue. The last CPU calls release(totalCPUs) to wake blocked CPUs so they can check whether execution is complete; otherwise, they could remain blocked forever.]
 
 ## Question 4: Classical Problems and Deadlock
 
@@ -356,24 +376,28 @@ Verification block of **my final version**:
 **Your Answer:** *(3-5 sentences)*
 
 **Classical problem and roles**:
-[Name the problem; who is the producer, who is the consumer?]
+[The classical synchronization problem is the Producer-Consumer Problem (Bounded-Buffer Problem). The main thread acts as a producer when it adds processes to the ReadyQueue, while the CPU workers act as consumers when they remove processes; however, CPUs also act as producers when they re-enqueue unfinished processes. For a bounded queue with capacity K, the three semaphores are empty = K, full = 0, and mutex = 1. A deadlock can occur if a producer holds the mutex while waiting for an empty slot, because a consumer needs the same mutex to remove a process and free a slot. To prevent this deadlock, we break the hold-and-wait condition by waiting on empty before acquiring mutex.]
 
 **Semaphores for a bounded queue (name and initial value)**:
-[Name the three semaphores and their initial values.]
+[empty = K: Represents the available empty slots.
+
+full = 0: Represents the number of occupied slots.
+
+mutex = 1: Ensures exclusive access to the queue.]
 
 **Deadlock scenario and prevention**:
-[Describe the scenario and the necessary condition you would break.]
+[A deadlock can occur when a producer acquires the mutex before waiting for an empty slot. If the queue is full, the producer waits while holding the mutex, preventing the consumer from acquiring it to remove an item and free a slot. This creates a hold-and-wait condition. To prevent it, the producer must wait on empty before acquiring mutex.]
 
 ## Summary
 
 **Key concepts I understood through these questions:**
-1.
-2.
-3.
+1.    Race conditions happen when multiple threads access shared data without synchronization.
+2.    Locks provide mutual exclusion, while semaphores coordinate access to available processes
+3.    The Producer-Consumer Problem explains synchronization between adding and removing processes.
 
 **Concepts I need to study more:**
-1.
-2.
+1.    Lock fairness, progress, and bounded waiting.
+2.    Deadlock conditions and semaphore ordering.
 
 ---
 
