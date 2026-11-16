@@ -173,7 +173,7 @@
 
 ---
 
-### Entry 4 - November 8, 2026, 2:00 PM
+### Entry 4 - November 9, 2026, 2:00 PM
 **What I did**:Tested the synchronization implementation by running the final program five separate times
 
 **Details**:I ran the program five times to verify that the synchronization features worked correctly. In all five runs, the expected and observed values matched:
@@ -193,7 +193,7 @@ Every run displayed the message All shared values are consistent
 
 ---
 
-### Entry 5 - November 9, 2026, 8:30 PM
+### Entry 5 - November 16, 2026, 8:30 PM
 **What I did**:Reviewed and documented the synchronization implementation
 
 **Details**:I reviewed the changes made to ReadyQueue, SharedStats, and CpuWorker. I documented the critical sections and the locks used to protect shared data. I also reviewed how the semaphore controls CPU waiting and how CPUs are awakened during shutdown. Finally, I organized the testing results for the assignment report
@@ -331,18 +331,15 @@ CPU-1 throws an IllegalThreadStateException because the thread has already been 
 
 I used two separate ReentrantLocks to protect shared data. The statsLock protects contextSwitchCount, completedProcessCount, and totalServiceTime, while the ReadyQueue lock protects the queue list and process map. I used one lock for all three statistics because it makes synchronization simpler and keeps statistics consistent, although updates to different counters must wait for each other. The ReadyQueue uses a different lock to avoid unnecessary blocking between queue operations and statistics updates. These locks provide mutual exclusion, and threads can make progress when a lock is released; however, the default ReentrantLock is not fair, so bounded waiting is not guaranteed and a thread may experience starvation.
 
-| Critical section (variable / method) | Lock used | Why it needs protection |
-|---|---|---|
-| [e.g., `ReadyQueue.poll()`] | [lock name] | [reason] |
-| | Critical section (variable / method) | Lock used | Why it needs protection |
+| Critical section | Lock used | Why it needs protection |
 |---|---|---|
 | `ReadyQueue.list` and `ReadyQueue.map` | `lock` | Prevent concurrent modifications and inconsistent queue data. |
 | `add()`, `poll()`, `processOf()`, `snapshot()` | `lock` | Ensure only one thread accesses or modifies the queue at a time. |
 | `contextSwitchCount` | `statsLock` | Prevent lost updates when multiple CPUs increment the counter. |
 | `completedProcessCount` | `statsLock` | Prevent incorrect completion counts. |
 | `totalServiceTime` | `statsLock` | Prevent lost updates when adding service time. |
-| `incrementContextSwitch()`, `incrementCompletedProcess()`, `addServiceTime()` | `statsLock` | Protect updates to shared statistics. |
-| Statistics getter methods | `statsLock` | Ensure safe access to shared counter values.|
+| Statistics update methods | `statsLock` | Protect updates to shared statistics. |
+| Statistics getter methods | `statsLock` | Ensure safe access to shared counter values. |
 
 ## Question 3: Busy Waiting vs Semaphore
 
