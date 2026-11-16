@@ -436,11 +436,11 @@ A deadlock can occur when a producer acquires the mutex before waiting for an em
 - ✅ No section headers deleted
 
 **Video**
-- [ ] 2-3 minutes long, named `StudentID_Assignment3_Demo.mp4`
-- [ ] Shows your name, ID, repository, 3 features (and your lock granularity choice), IDE execution with the verification block, one synchronization concept, and commit history
-- [ ] Link is **public** (tested in an incognito window) and pasted in the **Video Link** section above
+- ✅ 2-3 minutes long, named `StudentID_Assignment3_Demo.mp4`
+- ✅ Shows your name, ID, repository, 3 features (and your lock granularity choice), IDE execution with the verification block, one synchronization concept, and commit history
+- ✅ Link is **public** (tested in an incognito window) and pasted in the **Video Link** section above
 
 **Blackboard**
-- [ ] Submit **only** the link to your public GitHub repository
+- ✅ Submit **only** the link to your public GitHub repository
 
 > 🎯 **Good luck!** Start early, commit regularly, and make sure you can explain every line you submit.
